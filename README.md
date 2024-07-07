@@ -1,3 +1,3 @@
-# databricks_academy
+# Databricks Academy Training Content
 
-My combined repo with databricks academy content
+A combined repo with databricks academy content.
