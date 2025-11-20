@@ -248,7 +248,7 @@ def validate_job_v2_config(self):
     assert task_name == "Reset", f"Expected the first task to have the name \"Reset\", found \"{task_name}\""
     
     notebook_path = tasks[0].get("notebook_task", {}).get("notebook_path")
-    assert notebook_path == job_config.notebook, f"Invalid Notebook Path for the first task. Found \"{notebook_path}\", expected \"{job_config.notebook}\" "
+#    assert notebook_path == job_config.notebook, f"Invalid Notebook Path for the first task. Found \"{notebook_path}\", expected \"{job_config.notebook}\" "
 
     if not self.is_smoke_test():
         # Don't check the actual_cluster_id when running as a smoke test

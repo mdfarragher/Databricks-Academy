@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md-sandbox
-# MAGIC 
+# MAGIC
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
 # MAGIC   <img src="https://databricks.com/wp-content/uploads/2018/03/db-academy-rgb-1200px.png" alt="Databricks Learning" style="width: 600px">
 # MAGIC </div>
@@ -14,12 +14,12 @@
 # MAGIC 1. Write DataFrame to files
 # MAGIC 1. Write DataFrame to tables
 # MAGIC 1. Write DataFrame to a Delta table
-# MAGIC 
+# MAGIC
 # MAGIC ##### Methods
 # MAGIC - <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql.html#input-and-output" target="_blank">DataFrameReader</a>: **`csv`**, **`json`**, **`option`**, **`schema`**
 # MAGIC - <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql.html#input-and-output" target="_blank">DataFrameWriter</a>: **`mode`**, **`option`**, **`parquet`**, **`format`**, **`saveAsTable`**
 # MAGIC - <a href="https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.types.StructType.html#pyspark.sql.types.StructType" target="_blank">StructType</a>: **`toDDL`**
-# MAGIC 
+# MAGIC
 # MAGIC ##### Spark Types
 # MAGIC - <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql.html#data-types" target="_blank">Types</a>: **`ArrayType`**, **`DoubleType`**, **`IntegerType`**, **`LongType`**, **`StringType`**, **`StructType`**, **`StructField`**
 
@@ -31,16 +31,16 @@
 
 # MAGIC %md ## DataFrameReader
 # MAGIC Interface used to load a DataFrame from external storage systems
-# MAGIC 
+# MAGIC
 # MAGIC **`spark.read.parquet("path/to/files")`**
-# MAGIC 
+# MAGIC
 # MAGIC DataFrameReader is accessible through the SparkSession attribute **`read`**. This class includes methods to load DataFrames from different external storage systems.
 
 # COMMAND ----------
 
 # MAGIC %md ### Read from CSV files
 # MAGIC Read from CSV with the DataFrameReader's **`csv`** method and the following options:
-# MAGIC 
+# MAGIC
 # MAGIC Tab separator, use first line as header, infer schema
 
 # COMMAND ----------
@@ -53,6 +53,7 @@ users_df = (spark
            .csv(DA.paths.users_csv)
           )
 
+print (DA.paths.users_csv)
 users_df.printSchema()
 
 # COMMAND ----------
@@ -81,7 +82,10 @@ user_defined_schema = StructType([
     StructField("user_id", StringType(), True),
     StructField("user_first_touch_timestamp", LongType(), True),
     StructField("email", StringType(), True)
+
 ])
+
+display(user_defined_schema)
 
 # COMMAND ----------
 
@@ -96,6 +100,8 @@ users_df = (spark
            .schema(user_defined_schema)
            .csv(DA.paths.users_csv)
           )
+
+users_df.printSchema()
 
 # COMMAND ----------
 
@@ -113,10 +119,12 @@ users_df = (spark
            .csv(DA.paths.users_csv)
           )
 
+users_df.printSchema()
+
 # COMMAND ----------
 
 # MAGIC %md ### Read from JSON files
-# MAGIC 
+# MAGIC
 # MAGIC Read from JSON with DataFrameReader's **`json`** method and the infer schema option
 
 # COMMAND ----------
@@ -128,6 +136,10 @@ events_df = (spark
            )
 
 events_df.printSchema()
+
+# COMMAND ----------
+
+display(events_df)
 
 # COMMAND ----------
 
@@ -175,9 +187,9 @@ events_df = (spark
 # COMMAND ----------
 
 # MAGIC %md You can use the **`StructType`** Scala method **`toDDL`** to have a DDL-formatted string created for you.
-# MAGIC 
+# MAGIC
 # MAGIC This is convenient when you need to get the DDL-formated string for ingesting CSV and JSON but you don't want to hand craft it or the **`StructType`** variant of the schema.
-# MAGIC 
+# MAGIC
 # MAGIC However, this functionality is not available in Python but the power of the notebooks allows us to use both languages.
 
 # COMMAND ----------
@@ -195,13 +207,13 @@ spark.conf.set("com.whatever.your_scope.events_path", DA.paths.events_json)
 # MAGIC %scala
 # MAGIC // Step 2 - pull the value from the config (or copy & paste it)
 # MAGIC val eventsJsonPath = spark.conf.get("com.whatever.your_scope.events_path")
-# MAGIC 
+# MAGIC
 # MAGIC // Step 3 - Read in the JSON, but let it infer the schema
 # MAGIC val eventsSchema = spark.read
 # MAGIC                         .option("inferSchema", true)
 # MAGIC                         .json(eventsJsonPath)
 # MAGIC                         .schema.toDDL
-# MAGIC 
+# MAGIC
 # MAGIC // Step 4 - print the schema, select it, and copy it.
 # MAGIC println("="*80)
 # MAGIC println(eventsSchema)
@@ -223,9 +235,9 @@ display(events_df)
 
 # MAGIC %md
 # MAGIC This is a great "trick" for producing a schema for a net-new dataset and for accelerating development.
-# MAGIC 
+# MAGIC
 # MAGIC When you are done (e.g. for Step #7), make sure to delete your temporary code.
-# MAGIC 
+# MAGIC
 # MAGIC <img src="https://files.training.databricks.com/images/icon_warn_32.png"> WARNING: **Do not use this trick in production**</br>
 # MAGIC the inference of a schema can be REALLY slow as it<br/>
 # MAGIC forces a full read of the source dataset to infer the schema
@@ -234,7 +246,7 @@ display(events_df)
 
 # MAGIC %md ## DataFrameWriter
 # MAGIC Interface used to write a DataFrame to external storage systems
-# MAGIC 
+# MAGIC
 # MAGIC <strong><code>
 # MAGIC (df  
 # MAGIC &nbsp;  .write                         
@@ -243,15 +255,15 @@ display(events_df)
 # MAGIC &nbsp;  .parquet(output_dir)       
 # MAGIC )
 # MAGIC </code></strong>
-# MAGIC 
+# MAGIC
 # MAGIC DataFrameWriter is accessible through the SparkSession attribute **`write`**. This class includes methods to write DataFrames to different external storage systems.
 
 # COMMAND ----------
 
 # MAGIC %md ### Write DataFrames to files
-# MAGIC 
+# MAGIC
 # MAGIC Write **`users_df`** to parquet with DataFrameWriter's **`parquet`** method and the following configurations:
-# MAGIC 
+# MAGIC
 # MAGIC Snappy compression, overwrite mode
 
 # COMMAND ----------
@@ -286,9 +298,9 @@ display(
 # COMMAND ----------
 
 # MAGIC %md ### Write DataFrames to tables
-# MAGIC 
+# MAGIC
 # MAGIC Write **`events_df`** to a table using the DataFrameWriter method **`saveAsTable`**
-# MAGIC 
+# MAGIC
 # MAGIC <img src="https://files.training.databricks.com/images/icon_note_32.png" alt="Note"> This creates a global table, unlike the local view created by the DataFrame method **`createOrReplaceTempView`**
 
 # COMMAND ----------
@@ -307,13 +319,13 @@ print(DA.schema_name)
 
 # MAGIC %md
 # MAGIC ## Delta Lake
-# MAGIC 
+# MAGIC
 # MAGIC In almost all cases, the best practice is to use Delta Lake format, especially whenever the data will be referenced from a Databricks workspace. 
-# MAGIC 
+# MAGIC
 # MAGIC <a href="https://delta.io/" target="_blank">Delta Lake</a> is an open source technology designed to work with Spark to bring reliability to data lakes.
-# MAGIC 
+# MAGIC
 # MAGIC ![delta](https://files.training.databricks.com/images/aspwd/delta_storage_layer.png)
-# MAGIC 
+# MAGIC
 # MAGIC #### Delta Lake's Key Features
 # MAGIC - ACID transactions
 # MAGIC - Scalable metadata handling
@@ -328,7 +340,7 @@ print(DA.schema_name)
 
 # MAGIC %md
 # MAGIC ### Write Results to a Delta Table
-# MAGIC 
+# MAGIC
 # MAGIC Write **`events_df`** with the DataFrameWriter's **`save`** method and the following configurations: Delta format & overwrite mode.
 
 # COMMAND ----------
@@ -340,6 +352,12 @@ events_output_path = DA.paths.working_dir + "/delta/events"
  .format("delta")
  .mode("overwrite")
  .save(events_output_path)
+)
+
+# COMMAND ----------
+
+display(
+    dbutils.fs.ls(events_output_path)
 )
 
 # COMMAND ----------

@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md-sandbox
-# MAGIC 
+# MAGIC
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
 # MAGIC   <img src="https://databricks.com/wp-content/uploads/2018/03/db-academy-rgb-1200px.png" alt="Databricks Learning" style="width: 600px">
 # MAGIC </div>
@@ -15,7 +15,7 @@
 # MAGIC 3. Get cart item history for each user
 # MAGIC 4. Join cart item history with emails
 # MAGIC 5. Filter for emails with abandoned cart items
-# MAGIC 
+# MAGIC
 # MAGIC ##### Methods
 # MAGIC - <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.join.html#pyspark.sql.DataFrame.join" target="_blank">DataFrame</a>: **`join`**
 # MAGIC - <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/functions.html" target="_blank">Built-In Functions</a>: **`collect_set`**, **`explode`**, **`lit`**
@@ -54,7 +54,7 @@ display(events_df)
 # MAGIC %md ### 1: Get emails of converted users from transactions
 # MAGIC - Select the **`email`** column in **`sales_df`** and remove duplicates
 # MAGIC - Add a new column **`converted`** with the value **`True`** for all rows
-# MAGIC 
+# MAGIC
 # MAGIC Save the result as **`converted_users_df`**.
 
 # COMMAND ----------
@@ -72,7 +72,7 @@ display(converted_users_df)
 # COMMAND ----------
 
 # MAGIC %md #### 1.1: Check Your Work
-# MAGIC 
+# MAGIC
 # MAGIC Run the following cell to verify that your solution works:
 
 # COMMAND ----------
@@ -95,14 +95,14 @@ print("All test pass")
 # MAGIC - Perform an outer join on **`converted_users_df`** and **`users_df`** with the **`email`** field
 # MAGIC - Filter for users where **`email`** is not null
 # MAGIC - Fill null values in **`converted`** as **`False`**
-# MAGIC 
+# MAGIC
 # MAGIC Save the result as **`conversions_df`**.
 
 # COMMAND ----------
 
 # ANSWER
 conversions_df = (users_df
-                  .join(converted_users_df, "email", "outer")
+                  .join(converted_users_df, "email", "left")
                   .filter(col("email").isNotNull())
                   .na.fill(False)
                  )
@@ -111,7 +111,7 @@ display(conversions_df)
 # COMMAND ----------
 
 # MAGIC %md #### 2.1: Check Your Work
-# MAGIC 
+# MAGIC
 # MAGIC Run the following cell to verify that your solution works:
 
 # COMMAND ----------
@@ -138,7 +138,7 @@ print("All test pass")
 # MAGIC - Explode the **`items`** field in **`events_df`** with the results replacing the existing **`items`** field
 # MAGIC - Group by **`user_id`**
 # MAGIC   - Collect a set of all **`items.item_id`** objects for each user and alias the column to "cart"
-# MAGIC 
+# MAGIC
 # MAGIC Save the result as **`carts_df`**.
 
 # COMMAND ----------
@@ -153,7 +153,7 @@ display(carts_df)
 # COMMAND ----------
 
 # MAGIC %md #### 3.1: Check Your Work
-# MAGIC 
+# MAGIC
 # MAGIC Run the following cell to verify that your solution works:
 
 # COMMAND ----------
@@ -174,7 +174,7 @@ print("All test pass")
 # MAGIC %md
 # MAGIC ### 4: Join cart item history with emails
 # MAGIC - Perform a left join on **`conversions_df`** and **`carts_df`** on the **`user_id`** field
-# MAGIC 
+# MAGIC
 # MAGIC Save result as **`email_carts_df`**.
 
 # COMMAND ----------
@@ -186,7 +186,7 @@ display(email_carts_df)
 # COMMAND ----------
 
 # MAGIC %md #### 4.1: Check Your Work
-# MAGIC 
+# MAGIC
 # MAGIC Run the following cell to verify that your solution works:
 
 # COMMAND ----------
@@ -214,7 +214,7 @@ print("All test pass")
 # MAGIC ### 5: Filter for emails with abandoned cart items
 # MAGIC - Filter **`email_carts_df`** for users where **`converted`** is False
 # MAGIC - Filter for users with non-null carts
-# MAGIC 
+# MAGIC
 # MAGIC Save result as **`abandoned_carts_df`**.
 
 # COMMAND ----------
@@ -229,7 +229,7 @@ display(abandoned_carts_df)
 # COMMAND ----------
 
 # MAGIC %md #### 5.1: Check Your Work
-# MAGIC 
+# MAGIC
 # MAGIC Run the following cell to verify that your solution works:
 
 # COMMAND ----------
@@ -263,7 +263,7 @@ display(abandoned_items_df)
 # COMMAND ----------
 
 # MAGIC %md #### 6.1: Check Your Work
-# MAGIC 
+# MAGIC
 # MAGIC Run the following cell to verify that your solution works:
 
 # COMMAND ----------

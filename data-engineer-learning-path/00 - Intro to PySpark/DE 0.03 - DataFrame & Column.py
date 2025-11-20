@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md-sandbox
-# MAGIC 
+# MAGIC
 # MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
 # MAGIC   <img src="https://databricks.com/wp-content/uploads/2018/03/db-academy-rgb-1200px.png" alt="Databricks Learning" style="width: 600px">
 # MAGIC </div>
@@ -15,7 +15,7 @@
 # MAGIC 1. Add or replace columns
 # MAGIC 1. Subset rows
 # MAGIC 1. Sort rows
-# MAGIC 
+# MAGIC
 # MAGIC ##### Methods
 # MAGIC - <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/dataframe.html" target="_blank">DataFrame</a>: **`select`**, **`selectExpr`**, **`drop`**, **`withColumn`**, **`withColumnRenamed`**, **`filter`**, **`distinct`**, **`limit`**, **`sort`**
 # MAGIC - <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/column.html" target="_blank">Column</a>: **`alias`**, **`isin`**, **`cast`**, **`isNotNull`**, **`desc`**, operators
@@ -36,9 +36,9 @@ display(events_df)
 # COMMAND ----------
 
 # MAGIC %md ## Column Expressions
-# MAGIC 
+# MAGIC
 # MAGIC A <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/column.html" target="_blank">Column</a> is a logical construction that will be computed based on the data in a DataFrame using an expression
-# MAGIC 
+# MAGIC
 # MAGIC Construct a new Column based on existing columns in a DataFrame
 
 # COMMAND ----------
@@ -74,9 +74,16 @@ print(col("device"))
 
 # COMMAND ----------
 
+# spark.table("events").orderBy("price")
+
+spark.table("events").orderBy(col("price").desc())
+
+# COMMAND ----------
+
 # MAGIC %md Create complex expressions with existing columns, operators, and methods.
 
 # COMMAND ----------
+
 
 col("ecommerce.purchase_revenue_in_usd") + col("ecommerce.total_item_quantity")
 col("event_timestamp").desc()
@@ -125,7 +132,7 @@ display(rev_df)
 
 # COMMAND ----------
 
-devices_df = events_df.select("user_id", "device")
+devices_df = events_df #.select("user_id", "device")
 display(devices_df)
 
 # COMMAND ----------
@@ -153,7 +160,7 @@ display(apple_df)
 
 # MAGIC %md #### **`drop()`**
 # MAGIC Returns a new DataFrame after dropping the given column, specified as a string or Column object
-# MAGIC 
+# MAGIC
 # MAGIC Use strings to specify multiple columns
 
 # COMMAND ----------
@@ -207,7 +214,7 @@ display(location_df)
 
 # MAGIC %md #### **`filter()`**
 # MAGIC Filters rows using the given SQL expression or column based condition.
-# MAGIC 
+# MAGIC
 # MAGIC ##### Alias: **`where`**
 
 # COMMAND ----------
@@ -229,7 +236,7 @@ display(android_df)
 
 # MAGIC %md #### **`dropDuplicates()`**
 # MAGIC Returns a new DataFrame with duplicate rows removed, optionally considering only a subset of columns.
-# MAGIC 
+# MAGIC
 # MAGIC ##### Alias: **`distinct`**
 
 # COMMAND ----------
@@ -260,7 +267,7 @@ display(limit_df)
 
 # MAGIC %md #### **`sort()`**
 # MAGIC Returns a new DataFrame sorted by the given columns or expressions.
-# MAGIC 
+# MAGIC
 # MAGIC ##### Alias: **`orderBy`**
 
 # COMMAND ----------
@@ -286,7 +293,7 @@ display(decrease_sessions_df)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC 
+# MAGIC
 # MAGIC Run the following cell to delete the tables and files associated with this lesson.
 
 # COMMAND ----------
